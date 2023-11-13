@@ -4,6 +4,10 @@ import numpy as np
 import pandas as pd
 
 
+import calculation_benchmarks
+import util
+
+
 def setup_mpl_params_save():
     # plt.style.use("belle2")
     mpl.rcParams["figure.figsize"] = (8, 5)
@@ -131,3 +135,26 @@ def plot_image(
             fontsize="xx-large",
         )
         fig.colorbar(sc, ax=ax, pad=0.025, shrink=0.6, location="left")
+
+
+def plot_efficiency(data_recon, data_gen, variable, num_data_points, title, xlabel):
+
+    data_min = np.min([data_recon.min, data_gen.min])
+    data_max = np.max([data_recon.max, data_gen.max])
+    bin_edges = util.generate_bin_edges(start=data_min, stop=data_max, num_of_bins=num_data_points)
+
+    efficiency = calculation_benchmarks.calculate_efficiency(data_recon, data_gen, variable, bin_edges)
+    bin_middles = calculation_benchmarks.find_bin_middles(bin_edges)
+
+    fig, ax = plt.subplots()
+    ax.scatter(
+        bin_middles,
+        efficiency,
+        label=f'Reconstructed events: {len(data_recon)}\nGenerator events: {len(data_gen)}',
+        color='red'
+    )
+    ax.legend()
+    ax.set_ylim(0,1)
+    ax.set_ylabel(r'$\varepsilon$', rotation=0, labelpad=20)
+    ax.set_xlabel(xlabel)
+    ax.set_title(title)
