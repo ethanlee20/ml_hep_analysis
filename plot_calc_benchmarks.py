@@ -15,6 +15,11 @@ path_input_data_gen_level = sys.argv[1]
 path_input_data_recon_level = sys.argv[2]
 path_output_dir = sys.argv[3]
 
+def make_output_dir(path):
+    os.mkdir(path)
+try: make_output_dir(path_output_dir)
+except: print('could not make output dir')
+
 
 data_gen_level = pd.read_pickle(path_input_data_gen_level)
 split_data_gen_level = dict(

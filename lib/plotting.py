@@ -1,8 +1,9 @@
+import os.path
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
 
 import calculation_benchmarks
 import util
@@ -139,8 +140,8 @@ def plot_image(
 
 def plot_efficiency(data_recon, data_gen, variable, num_data_points, title, xlabel):
 
-    data_min = np.min([data_recon.min, data_gen.min])
-    data_max = np.max([data_recon.max, data_gen.max])
+    data_min = np.min([data_recon[variable].min(), data_gen[variable].min()])
+    data_max = np.max([data_recon[variable].max(), data_gen[variable].max()])
     bin_edges = util.generate_bin_edges(start=data_min, stop=data_max, num_of_bins=num_data_points)
 
     efficiency = calculation_benchmarks.calculate_efficiency(data_recon, data_gen, variable, bin_edges)
